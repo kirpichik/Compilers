@@ -78,7 +78,7 @@ class LexerTest {
 
     @Test
     void nextLexemeComplexShortTypes() throws IOException, ParseException {
-        assertLexemeTypes("()+-*/^", LEFT_BRACKET, RIGHT_BRACKET, PLUS, MINUS, DIVISION, POWER, EOF);
+        assertLexemeTypes("()+-*/^", LEFT_BRACKET, RIGHT_BRACKET, PLUS, MINUS, MULTIPLICATION, DIVISION, POWER, EOF);
 
         assertLexemeTypes("((((", LEFT_BRACKET, LEFT_BRACKET, LEFT_BRACKET, LEFT_BRACKET, EOF);
         assertLexemeTypes("))))", RIGHT_BRACKET, RIGHT_BRACKET, RIGHT_BRACKET, RIGHT_BRACKET, EOF);
@@ -117,8 +117,8 @@ class LexerTest {
 
     @Test
     void nextLexemeComplexNumberTypes() throws IOException, ParseException {
-        assertLexemeTypes("++123--", PLUS, PLUS, NUMBER, EOF);
-        assertLexemeTypes("* 123 /", PLUS, NUMBER, EOF);
+        assertLexemeTypes("++123--", PLUS, PLUS, NUMBER, MINUS, MINUS, EOF);
+        assertLexemeTypes("* 123 /", MULTIPLICATION, NUMBER, DIVISION, EOF);
         assertLexemeTypes("^^ \t 000 \t ^^", POWER, POWER, NUMBER, POWER, POWER, EOF);
     }
 
@@ -132,6 +132,7 @@ class LexerTest {
     @Test
     void nextLexemeComplexLong() throws IOException, ParseException {
         assertLexemeTypes("18 +\t128*42   ^3 \t", NUMBER, PLUS, NUMBER, MULTIPLICATION, NUMBER, POWER, NUMBER, EOF);
-        assertLexemeTypes("1+++4^^3 15 20", NUMBER, PLUS, PLUS, NUMBER, POWER, POWER, NUMBER, NUMBER, NUMBER, EOF);
+        assertLexemeTypes("1+++4^^3 15 20", NUMBER, PLUS, PLUS, PLUS, NUMBER, POWER, POWER, NUMBER, NUMBER, NUMBER,
+                          EOF);
     }
 }
