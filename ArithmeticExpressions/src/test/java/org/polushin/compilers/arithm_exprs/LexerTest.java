@@ -7,6 +7,7 @@ import java.io.StringReader;
 import java.text.ParseException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.polushin.compilers.arithm_exprs.Lexeme.Type.*;
 
 class LexerTest {
@@ -134,5 +135,14 @@ class LexerTest {
         assertLexemeTypes("18 +\t128*42   ^3 \t", NUMBER, PLUS, NUMBER, MULTIPLICATION, NUMBER, POWER, NUMBER, EOF);
         assertLexemeTypes("1+++4^^3 15 20", NUMBER, PLUS, PLUS, PLUS, NUMBER, POWER, POWER, NUMBER, NUMBER, NUMBER,
                           EOF);
+    }
+
+    @Test
+    void nextLexemeWrong() {
+        assertThrows(ParseException.class, () -> assertLexemeTypes(",", EOF));
+        assertThrows(ParseException.class, () -> assertLexemeTypes("???", EOF));
+        assertThrows(ParseException.class,
+                     () -> assertLexemeTypes("121 + 14, 18 * 2", NUMBER, PLUS, NUMBER, MULTIPLICATION, NUMBER, EOF));
+        assertThrows(ParseException.class, () -> assertLexemeTypes("14 & 128", NUMBER, NUMBER, EOF));
     }
 }
