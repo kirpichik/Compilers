@@ -16,6 +16,7 @@ public class Lexeme {
         MINUS,
         MULTIPLICATION,
         DIVISION,
+        POWER,
         LEFT_BRACKET,
         RIGHT_BRACKET,
         EOF
