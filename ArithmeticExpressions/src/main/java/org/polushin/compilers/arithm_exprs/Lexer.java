@@ -57,7 +57,7 @@ public class Lexer implements AutoCloseable {
             case '9':
                 return readNumber();
             default:
-                throw new ParseException(String.format("Unexpected char: '%c'", curr), pos);
+                throw new ParseException(String.format("Unexpected char: '%c' at %d", curr, pos), pos);
         }
     }
 
