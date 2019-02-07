@@ -80,7 +80,10 @@ class LexerTest {
     @Test
     void nextLexemeComplexShortTypes() throws IOException, ParseException {
         assertLexemeTypes("()+-*/^", LEFT_BRACKET, RIGHT_BRACKET, PLUS, MINUS, MULTIPLICATION, DIVISION, POWER, EOF);
+    }
 
+    @Test
+    void nextLexemeComplexShortNoSpace() throws IOException, ParseException {
         assertLexemeTypes("((((", LEFT_BRACKET, LEFT_BRACKET, LEFT_BRACKET, LEFT_BRACKET, EOF);
         assertLexemeTypes("))))", RIGHT_BRACKET, RIGHT_BRACKET, RIGHT_BRACKET, RIGHT_BRACKET, EOF);
         assertLexemeTypes("++++", PLUS, PLUS, PLUS, PLUS, EOF);
@@ -88,7 +91,10 @@ class LexerTest {
         assertLexemeTypes("****", MULTIPLICATION, MULTIPLICATION, MULTIPLICATION, MULTIPLICATION, EOF);
         assertLexemeTypes("////", DIVISION, DIVISION, DIVISION, DIVISION, EOF);
         assertLexemeTypes("^^^^", POWER, POWER, POWER, POWER, EOF);
+    }
 
+    @Test
+    void nextLexemeComplexShortSpace() throws IOException, ParseException {
         assertLexemeTypes(" ( ( ( ( ", LEFT_BRACKET, LEFT_BRACKET, LEFT_BRACKET, LEFT_BRACKET, EOF);
         assertLexemeTypes(" ) ) ) ) ", RIGHT_BRACKET, RIGHT_BRACKET, RIGHT_BRACKET, RIGHT_BRACKET, EOF);
         assertLexemeTypes(" + + + + ", PLUS, PLUS, PLUS, PLUS, EOF);
@@ -96,7 +102,10 @@ class LexerTest {
         assertLexemeTypes(" * * * * ", MULTIPLICATION, MULTIPLICATION, MULTIPLICATION, MULTIPLICATION, EOF);
         assertLexemeTypes(" / / / / ", DIVISION, DIVISION, DIVISION, DIVISION, EOF);
         assertLexemeTypes(" ^ ^ ^ ^ ", POWER, POWER, POWER, POWER, EOF);
+    }
 
+    @Test
+    void nextLexemeComplexShortTabs() throws IOException, ParseException {
         assertLexemeTypes("\t(\t(\t(\t(\t", LEFT_BRACKET, LEFT_BRACKET, LEFT_BRACKET, LEFT_BRACKET, EOF);
         assertLexemeTypes("\t)\t)\t)\t)\t", RIGHT_BRACKET, RIGHT_BRACKET, RIGHT_BRACKET, RIGHT_BRACKET, EOF);
         assertLexemeTypes("\t+\t+\t+\t+\t", PLUS, PLUS, PLUS, PLUS, EOF);
@@ -104,7 +113,10 @@ class LexerTest {
         assertLexemeTypes("\t*\t*\t*\t*\t", MULTIPLICATION, MULTIPLICATION, MULTIPLICATION, MULTIPLICATION, EOF);
         assertLexemeTypes("\t/\t/\t/\t/\t", DIVISION, DIVISION, DIVISION, DIVISION, EOF);
         assertLexemeTypes("\t^\t^\t^\t^\t", POWER, POWER, POWER, POWER, EOF);
+    }
 
+    @Test
+    void nextLexemeComplexShortTabsAndSpaces() throws IOException, ParseException {
         assertLexemeTypes("\t ( \t( \t (  \t  ( \t \t \t", LEFT_BRACKET, LEFT_BRACKET, LEFT_BRACKET, LEFT_BRACKET, EOF);
         assertLexemeTypes("\t ) \t) \t )  \t  ) \t \t \t", RIGHT_BRACKET, RIGHT_BRACKET, RIGHT_BRACKET, RIGHT_BRACKET,
                           EOF);
