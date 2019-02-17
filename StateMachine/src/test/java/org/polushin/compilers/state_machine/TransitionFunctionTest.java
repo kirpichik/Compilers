@@ -42,6 +42,8 @@ class TransitionFunctionTest {
     }
 
     TransitionFunction buildFunc(String... lines) {
+        if (lines.length == 1 && lines[0].isEmpty()) // Fix empty file
+            lines[0] = "\n";
         try {
             return TransitionFunction.readFrom(new StringReader(String.join("\n", lines)));
         } catch (InvalidTransitionFunctionException e) {
@@ -52,7 +54,7 @@ class TransitionFunctionTest {
 
     @Test
     void transitEmpty() {
-        assertTransits(buildFunc("\n"));
+        assertTransits(buildFunc(""));
     }
 
     @Test
