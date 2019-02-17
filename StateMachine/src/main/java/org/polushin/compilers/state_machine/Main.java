@@ -17,7 +17,7 @@ public class Main {
             System.out.println("File " + args[0] + " not found.");
             System.exit(1);
             return;
-        } catch (IOException e) {
+        } catch (IOException | InvalidTransitionFunctionException e) {
             e.printStackTrace();
             System.exit(1);
             return;

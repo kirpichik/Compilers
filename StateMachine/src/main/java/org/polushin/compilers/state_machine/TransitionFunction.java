@@ -1,9 +1,9 @@
 package org.polushin.compilers.state_machine;
 
 import java.io.Reader;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class TransitionFunction {
 
@@ -29,7 +29,26 @@ public class TransitionFunction {
         return Optional.of(new State(state, finalStates.contains(state)));
     }
 
-    public static TransitionFunction readFrom(Reader reader) {
-        return null;
+    public static TransitionFunction readFrom(Reader reader) throws InvalidTransitionFunctionException {
+        Map<Integer, Map<Character, Integer>> transitions = new HashMap<>();
+        Scanner scanner = new Scanner(reader);
+        Collection<Integer> finalStates;
+
+        try {
+            finalStates = Stream.of(scanner.nextLine().split(" ")).filter(s -> !s.isEmpty()).map(Integer::parseInt)
+                    .collect(Collectors.toSet());
+
+            while (scanner.hasNextLine()) {
+                int from = scanner.nextInt();
+                String str = scanner.next("[a-zA-Z]+");
+                int to = scanner.nextInt();
+                Map<Character, Integer> map = transitions.computeIfAbsent(from, k -> new HashMap<>());
+                str.chars().forEach((c) -> map.put((char) c, to));
+            }
+        } catch (NumberFormatException | NoSuchElementException e) {
+            throw new InvalidTransitionFunctionException(e);
+        }
+
+        return new TransitionFunction(transitions, finalStates);
     }
 }
