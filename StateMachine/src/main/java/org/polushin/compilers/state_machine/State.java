@@ -17,4 +17,17 @@ public class State {
     public boolean isFinal() {
         return isFinal;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof State))
+            return false;
+        State st = (State) obj;
+        return st.id == id && st.isFinal == isFinal;
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
+    }
 }
