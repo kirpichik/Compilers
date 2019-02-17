@@ -1,3 +1,4 @@
 rootProject.name = 'Compilers'
 include 'ArithmeticExpressions'
+include 'StateMachine'
 
