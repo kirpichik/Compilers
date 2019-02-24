@@ -1,6 +1,6 @@
 package org.polushin.compilers.state_machine;
 
-public class InvalidTransitionFunctionException extends Exception {
+public class InvalidTransitionFunctionException extends RuntimeException {
 
     public InvalidTransitionFunctionException() {
 

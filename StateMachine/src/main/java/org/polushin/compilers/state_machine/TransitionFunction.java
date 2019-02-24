@@ -1,54 +1,27 @@
 package org.polushin.compilers.state_machine;
 
 import java.io.Reader;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.Optional;
+import java.util.regex.Pattern;
 
-public class TransitionFunction {
+public interface TransitionFunction<T> {
 
-    private final Map<Integer, Map<Character, Integer>> transitions;
-    private final Collection<Integer> finalStates;
+    Pattern SYMBOLS_PATTERN = Pattern.compile("[a-zA-Z]+");
 
-    private TransitionFunction(Map<Integer, Map<Character, Integer>> transitions, Collection<Integer> finalStates) {
-        this.transitions = transitions;
-        this.finalStates = finalStates;
-    }
+    int getInitialState();
 
-    public State getInitialState() {
-        return new State(1, finalStates.contains(1));
-    }
+    Optional<T> transit(int currentState, char sub);
 
-    public Optional<State> transit(State currentState, char sub) {
-        Map<Character, Integer> target = transitions.get(currentState.getId());
-        if (target == null)
-            return Optional.empty();
-        Integer state = target.get(sub);
-        if (state == null)
-            return Optional.empty();
-        return Optional.of(new State(state, finalStates.contains(state)));
-    }
+    void registerTransition(int from, char sub, int to) throws InvalidTransitionFunctionException;
 
-    public static TransitionFunction readFrom(Reader reader) throws InvalidTransitionFunctionException {
-        Map<Integer, Map<Character, Integer>> transitions = new HashMap<>();
-        Scanner scanner = new Scanner(reader);
-        Collection<Integer> finalStates;
+    void markStateFinal(int state);
 
-        try {
-            finalStates = Stream.of(scanner.nextLine().split(" ")).filter(s -> !s.isEmpty()).map(Integer::parseInt)
-                    .collect(Collectors.toSet());
+    void unregisterTransition(int from, char sub, int to);
 
-            while (scanner.hasNextLine()) {
-                int from = scanner.nextInt();
-                String str = scanner.next("[a-zA-Z]+");
-                int to = scanner.nextInt();
-                Map<Character, Integer> map = transitions.computeIfAbsent(from, k -> new HashMap<>());
-                str.chars().forEach((c) -> map.put((char) c, to));
-            }
-        } catch (NumberFormatException | NoSuchElementException e) {
-            throw new InvalidTransitionFunctionException(e);
-        }
+    void unmarkStateFinal(int state);
 
-        return new TransitionFunction(transitions, finalStates);
-    }
+    boolean isStateFinal(int state);
+
+    void loadTransitions(Reader reader) throws InvalidTransitionFunctionException;
+
 }
