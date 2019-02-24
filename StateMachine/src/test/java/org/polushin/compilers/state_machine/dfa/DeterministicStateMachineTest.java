@@ -1,4 +1,4 @@
-package org.polushin.compilers.state_machine;
+package org.polushin.compilers.state_machine.dfa;
 
 import org.junit.jupiter.api.Test;
 
@@ -7,33 +7,26 @@ import java.io.StringReader;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class StateMachineTest {
-
-    TransitionFunction buildFunc(String... lines) throws InvalidTransitionFunctionException {
-        if (lines.length == 1 && lines[0].isEmpty()) // Fix empty file
-            lines[0] = "\n";
-        return TransitionFunction.readFrom(new StringReader(String.join("\n", lines)));
-    }
+class DeterministicStateMachineTest {
 
     void assertValidation(String input, String... lines) {
         try {
-            assertTrue(new StateMachine(buildFunc(lines)).validateInput(new StringReader(input)));
-        } catch (IOException | NoSuchTransitionException | InvalidTransitionFunctionException e) {
+            final DeterministicTransitionFunction function = DeterministicTransitionFunctionTest.buildFunc(lines);
+            final DeterministicStateMachine validator = new DeterministicStateMachine(function);
+            assertTrue(validator.validateInput(new StringReader(input)));
+        } catch (IOException e) {
             fail(e);
         }
     }
 
     void assertInvalidation(String input, String... lines) {
         try {
-            assertFalse(new StateMachine(buildFunc(lines)).validateInput(new StringReader(input)));
-        } catch (IOException | NoSuchTransitionException | InvalidTransitionFunctionException e) {
+            final DeterministicTransitionFunction function = DeterministicTransitionFunctionTest.buildFunc(lines);
+            final DeterministicStateMachine validator = new DeterministicStateMachine(function);
+            assertFalse(validator.validateInput(new StringReader(input)));
+        } catch (IOException e) {
             fail(e);
         }
-    }
-
-    void execValidation(String input, String... lines) {
-        assertThrows(NoSuchTransitionException.class,
-                     () -> new StateMachine(buildFunc(lines)).validateInput(new StringReader(input)));
     }
 
     @Test
@@ -75,7 +68,8 @@ class StateMachineTest {
 
     @Test
     void validateInputUnknownSymbol() {
-        execValidation("abc", "2", "1 d 2");
-        execValidation("def", "", "");
+        assertInvalidation("abc", "2", "1 d 2");
+        assertInvalidation("def", "", "");
     }
+
 }
